@@ -1,6 +1,5 @@
-import { startServer } from "./loaders/start-server";
-import { router } from "./router";
+import { startServer } from './loaders/start-server';
+import { router } from './router';
 
 
-
-startServer(router,3000)
+startServer(router, 3000);
