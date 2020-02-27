@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 import { ConnectionOptions } from 'typeorm';
 import { Alumni } from '../models/alumni';
+import { Feed } from '../models/feed';
 
 dotenv.config();
 
@@ -14,7 +15,7 @@ const {
 } = process.env;
 
 const dev = {
-    host: "postgres",
+    host: DB_HOST,
     port: DB_PORT,
     username: DB_USERNAME,
     password: DB_PASSWORD,
@@ -33,7 +34,7 @@ export const dbconfig: ConnectionOptions = {
     //@ts-ignore
     type: DB_TYPE,
     synchronize: true,
-    entities: [Alumni],
+    entities: [Alumni,Feed],
     cli: {
         entitiesDir: '../models',
     },

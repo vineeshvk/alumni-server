@@ -17,4 +17,7 @@ export class Alumni extends BaseEntity{
     @Column({default:false})
     admin:boolean
 
+    @Column()
+    approved:boolean;
+
 }

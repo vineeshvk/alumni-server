@@ -1,21 +1,22 @@
 import { compare, hash } from 'bcryptjs';
+import { ERROR_STATUS } from '../constants/error';
 import { Alumni } from '../models/alumni';
 
 export class AlumniService {
     async login({ email, password }: login) {
         const alumni = await Alumni.findOne({ email });
 
-        if (!alumni) return { error: 'User not found' };
-        const isValid = compare(password, alumni.password);
+        if (!alumni) return { error: ERROR_STATUS.USER_NOT_FOUND };
+        const isValid = await compare(password, alumni.password);
 
-        if (!isValid) return { error: 'Password not valid' };
+        if (!isValid) return { error:  ERROR_STATUS.PASSWORD_NOT_VALID};
 
         return { user: alumni };
     }
 
     async register({ email, password, name }: register) {
         const existUser = await Alumni.findOne({ email });
-        if (existUser) return { error: 'Email already exist' };
+        if (existUser) return { error: ERROR_STATUS.USER_EXIST };
 
         const hashPassword = await hash(password, 's');
         const alumni = Alumni.create({ email, name, password: hashPassword });
@@ -25,20 +26,25 @@ export class AlumniService {
         return { user: alumni };
     }
 
-    async getAlumni({ id }: alumniId) {
-        if (id) {
-            const alumni = await Alumni.findOne({ id });
-            return { user: alumni };
-        } else {
-            const alumni = await Alumni.find({});
-            return { user: alumni };
-        }
+    async getAlumni({ id,email,name,approved }: getAlumni) {
+        let alumni = await Alumni.find();
+
+        if (id) 
+            alumni = alumni.filter(a=>a.id===id)
+        if(email)
+            alumni = alumni.filter(a=>a.email.search(email))
+        if(name)
+            alumni = alumni.filter(a=>a.name.search(name))
+        if(approved!=null)
+            alumni = alumni.filter(a=>a.approved)
+
+        return { user : alumni };
     }
 
-    async approveAlumni({ id }: alumniId) {
+    async approveAlumni({ id }: approveAlumni) {
         const alumni = await Alumni.findOne({ id });
 
-        if (!alumni) return { error: 'User not found' };
+        if (!alumni) return { error: ERROR_STATUS.USER_NOT_FOUND };
 
         return { user: alumni };
     }
@@ -55,6 +61,13 @@ type register = {
     name: string;
 };
 
-type alumniId = {
-    id: string;
+type getAlumni = {
+    id?: string;
+    name?:string;
+    email?:string;
+    approved?:boolean
 };
+
+type approveAlumni = {
+    id:string;
+}
