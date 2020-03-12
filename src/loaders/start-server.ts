@@ -9,7 +9,7 @@ export async function startServer(router: express.Router, port: number) {
 
     await connectDB();
 
-    app.listen(process.env.SERVER_PORT || port, () => {
+    app.listen(process.env.PORT || port, () => {
         console.log('Server connected');
     });
 }

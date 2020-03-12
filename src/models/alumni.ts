@@ -1,23 +1,28 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    Entity,
+    PrimaryColumn,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
-export class Alumni extends BaseEntity{
-    @PrimaryGeneratedColumn()//TODO: set the value to uuid
-    id:string;
-    
+export class Alumni extends BaseEntity {
+    @PrimaryGeneratedColumn({ type: 'uuid' }) //TODO: set the value to uuid
+    id: string;
+
     @Column()
-    name:string;
+    name: string;
 
     @PrimaryColumn()
-    email:string;
+    email: string;
 
     @Column()
-    password:string;
+    password: string;
 
-    @Column({default:false})
-    admin:boolean
+    @Column({ default: false })
+    admin: boolean;
 
     @Column()
-    approved:boolean;
-
+    approved: boolean;
 }

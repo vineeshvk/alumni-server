@@ -14,7 +14,7 @@ const {
     DB_HOST,
 } = process.env;
 
-const dev = {
+let docker = {
     host: DB_HOST,
     port: DB_PORT,
     username: DB_USERNAME,
@@ -27,14 +27,14 @@ const deploy = {
     extra: { ssl: true },
 };
 
-const config = process.env.DATABASE_URL ? deploy : dev;
+const config = process.env.DATABASE_URL ? deploy : docker;
 
 export const dbconfig: ConnectionOptions = {
     ...config,
     //@ts-ignore
     type: DB_TYPE,
     synchronize: true,
-    entities: [Alumni,Feed],
+    entities: [Alumni, Feed],
     cli: {
         entitiesDir: '../models',
     },

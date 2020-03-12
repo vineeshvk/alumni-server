@@ -1,16 +1,16 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Feed extends BaseEntity{
-    @PrimaryGeneratedColumn({})//TODO:change type to uudi
-    id:string
+export class Feed extends BaseEntity {
+    @PrimaryGeneratedColumn({ type: 'uuid' })
+    id: string;
 
     @Column()
-    title:string
+    title: string;
 
     @Column()
-    description:string;
+    description: string;
 
     @Column()
-    image:string
+    image: string;
 }

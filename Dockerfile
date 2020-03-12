@@ -22,6 +22,6 @@ RUN npm install --production
 COPY --from=builder /usr/src/app/build ./
 COPY .env ./
 
-EXPOSE 8543
+EXPOSE 3000
 
 CMD node app.js

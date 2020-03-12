@@ -1,19 +1,21 @@
+# docker-compose.yml
 version: '3'
 services:
-  postgres:
-    image: postgres:alpine
-    ports:
-      - '5433:3306'
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: alumni
-    volumes:
-      - ./pgdata:/var/lib/postgresql/data
+    app:
+        build: .
+        depends_on:
+            - postgres
+        ports:
+            - '3000:3000'
+        volumes:
+            - .:/app/
+            - /app/node_modules
 
-  app:
-    build: .
-    depends_on:
-      - postgres
-    ports:
-      - '8543:8543'     
+    postgres:
+        image: postgres:alpine
+        ports:
+            - '35432:5432'
+        environment:
+            POSTGRES_USER: user
+            POSTGRES_PASSWORD: pass
+            POSTGRES_DB: db
