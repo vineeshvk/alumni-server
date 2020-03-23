@@ -1,6 +1,6 @@
-import { compare, hash } from 'bcryptjs';
+import { compare, hashSync } from 'bcryptjs';
 import { ERROR_STATUS } from '../constants/error';
-import { Alumni } from '../models/alumni';
+import Alumni from '../models/alumni';
 
 export class AlumniService {
     async login({ email, password }: login) {
@@ -9,7 +9,7 @@ export class AlumniService {
         if (!alumni) return { error: ERROR_STATUS.USER_NOT_FOUND };
         const isValid = await compare(password, alumni.password);
 
-        if (!isValid) return { error:  ERROR_STATUS.PASSWORD_NOT_VALID};
+        if (!isValid) return { error: ERROR_STATUS.PASSWORD_NOT_VALID };
 
         return { user: alumni };
     }
@@ -18,7 +18,7 @@ export class AlumniService {
         const existUser = await Alumni.findOne({ email });
         if (existUser) return { error: ERROR_STATUS.USER_EXIST };
 
-        const hashPassword = await hash(password, 's');
+        const hashPassword = await hashSync(password, 8);
         const alumni = Alumni.create({ email, name, password: hashPassword });
 
         await alumni.save();
@@ -26,19 +26,15 @@ export class AlumniService {
         return { user: alumni };
     }
 
-    async getAlumni({ id,email,name,approved }: getAlumni) {
+    async getAlumni({ id, email, name, approved }: getAlumni) {
         let alumni = await Alumni.find();
 
-        if (id) 
-            alumni = alumni.filter(a=>a.id===id)
-        if(email)
-            alumni = alumni.filter(a=>a.email.search(email))
-        if(name)
-            alumni = alumni.filter(a=>a.name.search(name))
-        if(approved!=null)
-            alumni = alumni.filter(a=>a.approved)
+        if (id) alumni = alumni.filter(a => a.id === id);
+        if (email) alumni = alumni.filter(a => a.email.search(email));
+        if (name) alumni = alumni.filter(a => a.name.search(name));
+        if (approved != null) alumni = alumni.filter(a => a.approved);
 
-        return { user : alumni };
+        return { user: alumni };
     }
 
     async approveAlumni({ id }: approveAlumni) {
@@ -63,11 +59,11 @@ type register = {
 
 type getAlumni = {
     id?: string;
-    name?:string;
-    email?:string;
-    approved?:boolean
+    name?: string;
+    email?: string;
+    approved?: boolean;
 };
 
 type approveAlumni = {
-    id:string;
-}
+    id: string;
+};

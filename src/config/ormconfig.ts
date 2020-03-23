@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import { ConnectionOptions } from 'typeorm';
-import { Alumni } from '../models/alumni';
-import { Feed } from '../models/feed';
+import Alumni from '../models/alumni';
+import  Feed from '../models/feed';
 
 dotenv.config();
 
@@ -16,7 +16,7 @@ const {
 
 let docker = {
     host: DB_HOST,
-    port: DB_PORT,
+    port: parseInt(DB_PORT),
     username: DB_USERNAME,
     password: DB_PASSWORD,
     database: DB_NAME,
@@ -31,11 +31,13 @@ const config = process.env.DATABASE_URL ? deploy : docker;
 
 export const dbconfig: ConnectionOptions = {
     ...config,
-    //@ts-ignore
-    type: DB_TYPE,
+    type: 'postgres',
+    dropSchema: false,
     synchronize: true,
     entities: [Alumni, Feed],
     cli: {
         entitiesDir: '../models',
+        migrationsDir: 'src/migration',
+        subscribersDir: 'src/subscriber',
     },
 };

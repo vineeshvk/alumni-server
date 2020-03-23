@@ -7,8 +7,8 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Alumni extends BaseEntity {
-    @PrimaryGeneratedColumn({ type: 'uuid' }) //TODO: set the value to uuid
+export default class Alumni extends BaseEntity {
+    @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column()
@@ -23,6 +23,6 @@ export class Alumni extends BaseEntity {
     @Column({ default: false })
     admin: boolean;
 
-    @Column()
+    @Column({ default: false })
     approved: boolean;
 }

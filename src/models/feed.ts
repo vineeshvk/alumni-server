@@ -1,8 +1,8 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Feed extends BaseEntity {
-    @PrimaryGeneratedColumn({ type: 'uuid' })
+export default class Feed extends BaseEntity {
+    @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column()

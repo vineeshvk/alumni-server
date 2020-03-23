@@ -1,28 +1,28 @@
 {
-  "name": "alumni-project",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
-  "scripts": {
-    "start": "ts-node src/app.ts",
-    "build": "tsc -b"
-  },
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "cor": "0.0.0",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "pg": "^7.18.2",
-    "typeorm": "^0.2.22"
-  },
-  "author": "vineesh",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/bcryptjs": "^2.4.2",
-    "@types/express": "^4.17.2",
-    "mysql": "^2.18.1",
-    "ts-node": "^7.0.1",
-    "typescript": "^3.2.2"
-  }
+    "name": "alumni-project",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "start": "ts-node src/app.ts",
+        "build": "tsc -b",
+        "update:packages": "node wipe-dependencies.js && rm -rf node_modules && npm update --save-dev && npm update --save"
+    },
+    "dependencies": {
+        "bcryptjs": "*",
+        "body-parser": "*",
+        "dotenv": "*",
+        "express": "*",
+        "pg": "*",
+        "typeorm": "*"
+    },
+    "author": "vineesh",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/bcryptjs": "*",
+        "@types/express": "*",
+        "mysql": "*",
+        "ts-node": "*",
+        "typescript": "*"
+    }
 }

@@ -1,13 +1,12 @@
 import * as express from 'express';
-import { connectDB } from './connect-db';
-const cors = require('cors');
+import { DBConnection } from './db-connect';
+import bodyParser = require('body-parser');
 
-export async function startServer(router: express.Router, port: number) {	
+export async function startServer(router: express.Router, port: number) {
     const app = express();
-    app.use(cors())
+    app.use(bodyParser.json());
     app.use('/', router);
-
-    await connectDB();
+    await DBConnection.getConnection();
 
     app.listen(process.env.PORT || port, () => {
         console.log('Server connected');
