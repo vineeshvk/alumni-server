@@ -21,20 +21,6 @@ export class AlumniController {
         if (!(email && name && password))
             return { error: ERROR_STATUS.INPUT_MISSING };
 
-        // const feed = new Feed();
-        // feed.description = 'sd';
-        // feed.image = 'sfew';
-        // feed.title = 'werwer';
-
-        // const connect = await DBConnection.getConnection();
-        // await connect.manager.save(feed);
-
-        // const feed = Feed.create({
-        //     description: 'sdf',
-        //     image: 'sdfds',
-        //     title: 'sdf',
-        // });
-        // await feed.save();
         const data = await service.register({ email, name, password });
         res.send(data);
     }
@@ -49,11 +35,29 @@ export class AlumniController {
     async approveAlumni(req: Request, res: Response) {
         const service = new AlumniService();
 
-        const { id } = req.params;
+        const { id } = req.body;
 
         if (!id) return { error: ERROR_STATUS.INPUT_MISSING };
 
         const data = await service.approveAlumni({ id });
+        res.send(data);
+    }
+
+    async editAlumniDetails(req: Request, res: Response) {
+        const service = new AlumniService();
+
+        const { id, email, name, password } = req.body;
+
+        if (!id || !(email || name || password))
+            return { error: ERROR_STATUS.INPUT_MISSING };
+
+        const data = await service.editAlumniDetails({
+            id,
+            email,
+            name,
+            password,
+        });
+
         res.send(data);
     }
 }

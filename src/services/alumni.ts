@@ -18,7 +18,7 @@ export class AlumniService {
         const existUser = await Alumni.findOne({ email });
         if (existUser) return { error: ERROR_STATUS.USER_EXIST };
 
-        const hashPassword = await hashSync(password, 8);
+        const hashPassword = hashSync(password, 8);
         const alumni = Alumni.create({ email, name, password: hashPassword });
 
         await alumni.save();
@@ -44,6 +44,19 @@ export class AlumniService {
 
         return { user: alumni };
     }
+
+    async editAlumniDetails({ id, password, email, name }: editAlumniDetails) {
+        const alumni = await Alumni.findOne({ id });
+
+        if (!alumni) return { error: ERROR_STATUS.USER_NOT_FOUND };
+
+        if (email) alumni.email = email;
+        if (password) alumni.password = hashSync(password, 8);
+        if (name) alumni.name = name;
+
+        await alumni.save();
+        return { user: alumni };
+    }
 }
 
 type login = {
@@ -66,4 +79,11 @@ type getAlumni = {
 
 type approveAlumni = {
     id: string;
+};
+
+type editAlumniDetails = {
+    id: string;
+    name?: string;
+    email?: string;
+    password?: string;
 };
