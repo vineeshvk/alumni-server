@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import { ConnectionOptions } from 'typeorm';
-import Alumni from '../models/alumni';
-import  Feed from '../models/feed';
+import { Alumni, College, Event } from '../models';
+import { Message } from '../models/message';
 
 dotenv.config();
 
@@ -34,7 +34,7 @@ export const dbconfig: ConnectionOptions = {
     type: 'postgres',
     dropSchema: false,
     synchronize: true,
-    entities: [Alumni, Feed],
+    entities: [Alumni, Event, College, Message],
     cli: {
         entitiesDir: '../models',
         migrationsDir: 'src/migration',

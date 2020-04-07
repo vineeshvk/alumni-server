@@ -1,6 +1,6 @@
 import { compare, hashSync } from 'bcryptjs';
 import { ERROR_STATUS } from '../constants/error';
-import Alumni from '../models/alumni';
+import { Alumni } from '../models';
 
 export class AlumniService {
     async login({ email, password }: login) {
@@ -29,10 +29,10 @@ export class AlumniService {
     async getAlumni({ id, email, name, approved }: getAlumni) {
         let alumni = await Alumni.find();
 
-        if (id) alumni = alumni.filter(a => a.id === id);
-        if (email) alumni = alumni.filter(a => a.email.search(email));
-        if (name) alumni = alumni.filter(a => a.name.search(name));
-        if (approved != null) alumni = alumni.filter(a => a.approved);
+        if (id) alumni = alumni.filter((a) => a.id === id);
+        if (email) alumni = alumni.filter((a) => a.email.search(email));
+        if (name) alumni = alumni.filter((a) => a.name.search(name));
+        if (approved != null) alumni = alumni.filter((a) => a.approved);
 
         return { user: alumni };
     }

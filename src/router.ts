@@ -1,9 +1,11 @@
 import { Router } from 'express';
-import { AlumniController } from './controllers/alumni';
+import { AlumniController } from './controllers';
+import { AlumniService } from './services';
 
 const router = Router();
 
-const alumni = new AlumniController();
+const service = new AlumniService();
+const alumni = new AlumniController(service);
 
 router.get('/getAlumni', alumni.getAlumni);
 
