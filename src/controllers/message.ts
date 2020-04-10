@@ -5,12 +5,26 @@ import { MessageService } from '../services';
 export class MessageController {
     constructor(private service: MessageService) {}
 
-    addMessage = (req: Request, res: Response) => {
+    addMessage = async (req: Request, res: Response) => {
         const { alumniId, isAlumni, text } = req.body;
 
         if (!(alumniId && text))
             return res.send({ error: ERROR_STATUS.INPUT_MISSING });
 
-        this.service.addMessage({ alumniId, isAlumni, text });
+        const data = await this.service.addMessage({
+            alumniId,
+            isAlumni,
+            text,
+        });
+        res.send(data);
+    };
+
+    getMessages = async (req: Request, res: Response) => {
+        const { alumniId } = req.query;
+
+        if (!alumniId) return res.send({ error: ERROR_STATUS.INPUT_MISSING });
+
+        const data = await this.service.getMessages({ alumniId });
+        res.send(data);
     };
 }

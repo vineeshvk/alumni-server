@@ -16,12 +16,37 @@ export class AlumniController {
     };
 
     register = async (req: Request, res: Response) => {
-        const { email, name, password } = req.body;
+        const {
+            email,
+            name,
+            password,
+            batch,
+            collegeId,
+            degree,
+            department,
+            dob,
+            gender,
+            phone,
+            registerNo,
+        } = req.body;
 
         if (!(email && name && password))
             return res.send({ error: ERROR_STATUS.INPUT_MISSING });
 
-        const data = await this.service.register({ email, name, password });
+        const data = await this.service.register({
+            email,
+            name,
+            password,
+            batch,
+            collegeId,
+            degree,
+            department,
+            dob,
+            gender,
+            phone,
+            registerNo,
+        });
+        
         res.send(data);
     };
 

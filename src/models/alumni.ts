@@ -40,6 +40,9 @@ export class Alumni extends BaseEntity {
     batch: number;
 
     @Column()
+    registerNo:string;
+
+    @Column()
     phone: string;
 
     @Column({ default: false })

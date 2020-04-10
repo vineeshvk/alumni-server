@@ -22,6 +22,7 @@ export class MessageService {
         });
 
         await message.save();
+        return { message };
     };
 }
 

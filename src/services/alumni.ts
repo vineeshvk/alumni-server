@@ -1,9 +1,9 @@
 import { compare, hashSync } from 'bcryptjs';
 import { ERROR_STATUS } from '../constants/error';
-import { Alumni } from '../models';
+import { Alumni, College } from '../models';
 
 export class AlumniService {
-    async login({ email, password }: login) {
+    login = async ({ email, password }: login) => {
         const alumni = await Alumni.findOne({ email });
 
         if (!alumni) return { error: ERROR_STATUS.USER_NOT_FOUND };
@@ -12,40 +12,84 @@ export class AlumniService {
         if (!isValid) return { error: ERROR_STATUS.PASSWORD_NOT_VALID };
 
         return { user: alumni };
-    }
+    };
 
-    async register({ email, password, name }: register) {
+    register = async ({
+        email,
+        password,
+        name,
+        batch,
+        collegeId,
+        degree,
+        department,
+        dob,
+        gender,
+        phone,
+        registerNo,
+    }: register) => {
         const existUser = await Alumni.findOne({ email });
         if (existUser) return { error: ERROR_STATUS.USER_EXIST };
 
         const hashPassword = hashSync(password, 8);
-        const alumni = Alumni.create({ email, name, password: hashPassword });
+        const college = await College.findOne({ id: collegeId });
+        const alumni = Alumni.create({
+            email,
+            name,
+            password: hashPassword,
+            batch,
+            college,
+            degree,
+            department,
+            dob,
+            gender,
+            phone,
+            registerNo,
+        });
 
         await alumni.save();
 
         return { user: alumni };
-    }
+    };
 
-    async getAlumni({ id, email, name, approved }: getAlumni) {
-        let alumni = await Alumni.find();
+    getAlumni = async ({
+        id,
+        email,
+        name,
+        approved,
+        batch,
+        college,
+        degree,
+        department,
+    }: getAlumni) => {
+        let alumni = await Alumni.find({ relations: ['college'] });
 
         if (id) alumni = alumni.filter((a) => a.id === id);
         if (email) alumni = alumni.filter((a) => a.email.search(email));
         if (name) alumni = alumni.filter((a) => a.name.search(name));
         if (approved != null) alumni = alumni.filter((a) => a.approved);
+        if (batch) alumni = alumni.filter((a) => a.batch === batch);
+        if (college) alumni = alumni.filter((a) => a.college.name === college);
+        if (degree) alumni = alumni.filter((a) => a.degree === degree);
+        if (department)
+            alumni = alumni.filter((a) => a.department === department);
 
         return { user: alumni };
-    }
+    };
 
-    async approveAlumni({ id }: approveAlumni) {
+    approveAlumni = async ({ id }: approveAlumni) => {
         const alumni = await Alumni.findOne({ id });
 
         if (!alumni) return { error: ERROR_STATUS.USER_NOT_FOUND };
 
         return { user: alumni };
-    }
+    };
 
-    async editAlumniDetails({ id, password, email, name }: editAlumniDetails) {
+    editAlumniDetails = async ({
+        id,
+        password,
+        email,
+        name,
+    }: editAlumniDetails) => {
         const alumni = await Alumni.findOne({ id });
 
         if (!alumni) return { error: ERROR_STATUS.USER_NOT_FOUND };
@@ -56,7 +100,7 @@ export class AlumniService {
 
         await alumni.save();
         return { user: alumni };
-    }
+    };
 }
 
 type login = {
@@ -68,6 +112,14 @@ type register = {
     email: string;
     password: string;
     name: string;
+    batch: number;
+    collegeId: string;
+    degree: string;
+    department: string;
+    dob: string;
+    gender: string;
+    phone: string;
+    registerNo: string;
 };
 
 type getAlumni = {
@@ -75,6 +127,10 @@ type getAlumni = {
     name?: string;
     email?: string;
     approved?: boolean;
+    batch?: number;
+    college?: string;
+    degree?: string;
+    department?: string;
 };
 
 type approveAlumni = {
