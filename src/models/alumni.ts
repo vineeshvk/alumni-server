@@ -2,13 +2,13 @@ import {
     BaseEntity,
     Column,
     Entity,
-    ManyToOne,
     OneToMany,
     PrimaryColumn,
     PrimaryGeneratedColumn,
+    ManyToOne,
 } from 'typeorm';
-import { College } from '.';
 import { Message } from './message';
+import { College } from '.';
 
 @Entity()
 export class Alumni extends BaseEntity {
@@ -24,25 +24,25 @@ export class Alumni extends BaseEntity {
     @Column()
     password: string;
 
-    @Column()
+    @Column({ nullable: true })
     dob: string;
 
-    @Column()
+    @Column({ nullable: true })
     gender: string;
 
-    @Column()
-    department: string;
+    @Column({ nullable: true })
+    major: string;
 
-    @Column()
+    @Column({ nullable: true })
     degree: string;
 
-    @Column()
-    batch: number;
+    @Column({ nullable: true })
+    batch: string;
 
-    @Column()
-    registerNo:string;
+    @Column({ nullable: true })
+    registerNo: string;
 
-    @Column()
+    @Column({ nullable: true })
     phone: string;
 
     @Column({ default: false })
@@ -54,6 +54,6 @@ export class Alumni extends BaseEntity {
     @OneToMany((type) => Message, (message) => message.alumni)
     messages: Message[];
 
-    @ManyToOne(type => College, college => college.alumni)
+    @ManyToOne((type) => College, (college) => college.alumni)
     college: College;
 }

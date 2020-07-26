@@ -24,7 +24,7 @@ let docker = {
 
 const deploy = {
     url: process.env.DATABASE_URL,
-    extra: { ssl: true },
+    extra: { ssl: { rejectUnauthorized: false } },
 };
 
 const config = process.env.DATABASE_URL ? deploy : docker;

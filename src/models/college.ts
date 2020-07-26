@@ -16,16 +16,7 @@ export class College extends BaseEntity {
     name: string;
 
     @Column()
-    affiliated: string;
-
-    @Column()
     address: string;
-
-    @Column()
-    state: string;
-
-    @Column()
-    district: string;
 
     @OneToMany((type) => Alumni, (alumni) => alumni.college)
     alumni: Alumni[];

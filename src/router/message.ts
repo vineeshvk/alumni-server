@@ -7,4 +7,7 @@ const messageRouter = Router();
 const service = new MessageService();
 const message = new MessageController(service);
 
+messageRouter.get('/', message.getMessages);
+messageRouter.post('/', message.addMessage);
+
 export { messageRouter };

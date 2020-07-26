@@ -14,19 +14,19 @@ export class AlumniService {
         return { user: alumni };
     };
 
-    register = async ({
+    alumniRegister = async ({
         email,
         password,
         name,
         batch,
         collegeId,
         degree,
-        department,
+        major,
         dob,
         gender,
         phone,
         registerNo,
-    }: register) => {
+    }: alumniRegister) => {
         const existUser = await Alumni.findOne({ email });
         if (existUser) return { error: ERROR_STATUS.USER_EXIST };
 
@@ -39,7 +39,7 @@ export class AlumniService {
             batch,
             college,
             degree,
-            department,
+            major,
             dob,
             gender,
             phone,
@@ -51,15 +51,38 @@ export class AlumniService {
         return { user: alumni };
     };
 
+    adminRegister = async ({
+        name,
+        email,
+        password,
+        collegeId,
+    }: adminRegister) => {
+        const hashPassword = hashSync(password, 8);
+        const college = await College.findOne({ id: collegeId });
+
+        const admin = Alumni.create({
+            name,
+            email,
+            password: hashPassword,
+            college,
+            approved: true,
+            admin: true,
+        });
+
+        await admin.save();
+
+        return { user: admin };
+    };
+
     getAlumni = async ({
         id,
         email,
         name,
         approved,
         batch,
-        college,
+        collegeId,
         degree,
-        department,
+        major,
     }: getAlumni) => {
         let alumni = await Alumni.find({ relations: ['college'] });
 
@@ -68,10 +91,10 @@ export class AlumniService {
         if (name) alumni = alumni.filter((a) => a.name.search(name));
         if (approved != null) alumni = alumni.filter((a) => a.approved);
         if (batch) alumni = alumni.filter((a) => a.batch === batch);
-        if (college) alumni = alumni.filter((a) => a.college.name === college);
+        if (collegeId)
+            alumni = alumni.filter((a) => a.college.id === collegeId);
         if (degree) alumni = alumni.filter((a) => a.degree === degree);
-        if (department)
-            alumni = alumni.filter((a) => a.department === department);
+        if (major) alumni = alumni.filter((a) => a.major === major);
 
         return { user: alumni };
     };
@@ -101,6 +124,12 @@ export class AlumniService {
         await alumni.save();
         return { user: alumni };
     };
+
+    emailAlreadyExists = async ({ email }) => {
+        const alumni = await Alumni.findOne({ email });
+
+        return { emailAlreadyExists: alumni != null };
+    };
 }
 
 type login = {
@@ -108,18 +137,25 @@ type login = {
     password: string;
 };
 
-type register = {
+type alumniRegister = {
     email: string;
     password: string;
     name: string;
-    batch: number;
+    batch: string;
     collegeId: string;
     degree: string;
-    department: string;
+    major: string;
     dob: string;
     gender: string;
     phone: string;
     registerNo: string;
+};
+
+type adminRegister = {
+    name: string;
+    email: string;
+    password: string;
+    collegeId: string;
 };
 
 type getAlumni = {
@@ -127,10 +163,10 @@ type getAlumni = {
     name?: string;
     email?: string;
     approved?: boolean;
-    batch?: number;
-    college?: string;
+    batch?: string;
+    collegeId?: string;
     degree?: string;
-    department?: string;
+    major?: string;
 };
 
 type approveAlumni = {
